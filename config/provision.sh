@@ -14,6 +14,7 @@ update_package_index() {
 install_required_packages() {
   sudo apt-get install -y \
     aptitude \
+    locales \
     zsh \
     tmux \
     curl \
@@ -50,8 +51,16 @@ setup_zsh() {
   chsh -s /bin/zsh vagrant
 }
 
+setup_locale() {
+  echo "Melbourne/Australia" > /etc/timezone
+  dpkg-reconfigure -f noninteractive tzdata
+	# LANG=en_GB.UTF-8
+	# sed -i -e "s/# $LANG.*/$LANG.UTF-8 UTF-8/" /etc/locale.gen
+	# dpkg-reconfigure --frontend=noninteractive locales
+	# update-locale LANG=$LANG
+}
+
 setup_stow() {
-  cd ~vagrant/dotfiles
   run_as_vagrant "cd ~vagrant/dotfiles/; ./stow-all.sh"
 }
 
@@ -95,10 +104,10 @@ run_as_vagrant() {
   su vagrant bash -l -c "$1"
 }
 
-
 update_package_index
 install_required_packages
 setup_zsh
+setup_locale
 setup_stow
 install_latest_node_v7
 install_global_npm_packages
