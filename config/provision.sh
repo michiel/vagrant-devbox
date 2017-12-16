@@ -14,6 +14,9 @@ update_package_index() {
 install_required_packages() {
   sudo apt-get install -y \
     aptitude \
+    zsh \
+    tmux \
+    curl \
     git \
     tig \
     tree \
@@ -21,11 +24,10 @@ install_required_packages() {
     unzip \
     htop \
     whois \
+    stow \
     ack-grep \
     dos2unix \
     build-essential \
-    libpq-dev \
-    python-dev \
     python3-dev \
     libxml2-dev \
     libyaml-dev \
@@ -35,21 +37,27 @@ install_required_packages() {
     libimage-exiftool-perl \
     libjpeg-dev \
     xclip \
-    gnupg-curl \
     libreadline-dev \
-    openjdk-8-jre-headless \
     openjdk-8-jdk-headless \
-    silversearcher-ag \
-    pandoc \
-    texlive-latex-base \
-    texlive-xetex \
-    texlive-fonts-recommended-doc
+    silversearcher-ag
+#     pandoc \
+#     texlive-latex-base \
+#     texlive-xetex \
+#     texlive-fonts-recommended-doc
+}
+
+setup_zsh() {
+  chsh -s /bin/zsh vagrant
+}
+
+setup_stow() {
+  cd ~vagrant/dotfiles
+  run_as_vagrant "cd ~vagrant/dotfiles/; ./stow-all.sh"
 }
 
 install_rust() {
-    curl https://sh.rustup.rs -sSf | sh
-    rustup completions bash > /etc/bash_completion.d/rustup.bash-completion
-    rustup completions zsh > ~/.zfunc/_rustup
+    run_as_vagrant "curl https://sh.rustup.rs -sSf | sh -s -- -y"
+    run_as_vagrant "rustup component add rust-src"
 }
 
 install_latest_node_v7() {
@@ -90,6 +98,8 @@ run_as_vagrant() {
 
 update_package_index
 install_required_packages
+setup_zsh
+setup_stow
 install_latest_node_v7
 install_global_npm_packages
 install_rust
