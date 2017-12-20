@@ -15,6 +15,7 @@ install_required_packages() {
   sudo apt-get install -y \
     aptitude \
     locales \
+    firejail \
     zsh \
     tmux \
     curl \
@@ -40,7 +41,8 @@ install_required_packages() {
     xclip \
     libreadline-dev \
     openjdk-8-jdk-headless \
-    silversearcher-ag
+    silversearcher-ag \
+    graphviz
 #     pandoc \
 #     texlive-latex-base \
 #     texlive-xetex \
@@ -54,10 +56,10 @@ setup_zsh() {
 setup_locale() {
   echo "Melbourne/Australia" > /etc/timezone
   dpkg-reconfigure -f noninteractive tzdata
-	# LANG=en_GB.UTF-8
-	# sed -i -e "s/# $LANG.*/$LANG.UTF-8 UTF-8/" /etc/locale.gen
-	# dpkg-reconfigure --frontend=noninteractive locales
-	# update-locale LANG=$LANG
+  # LANG=en_GB.UTF-8
+  # sed -i -e "s/# $LANG.*/$LANG.UTF-8 UTF-8/" /etc/locale.gen
+  # dpkg-reconfigure --frontend=noninteractive locales
+  # update-locale LANG=$LANG
 }
 
 setup_stow() {

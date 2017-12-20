@@ -24,11 +24,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.ssh.forward_agent = false
 
-#   ssh_key_path = "~/.ssh/"
-# 
-#   config.vm.provision "shell", inline: "mkdir -p #{HOMEDIR}/.ssh"
-#   config.vm.provision "file", source: "#{ ssh_key_path + 'id_rsa' }", destination: "#{HOMEDIR}/.ssh/id_rsa"
-#   config.vm.provision "file", source: "#{ ssh_key_path + 'id_rsa.pub' }", destination: "#{HOMEDIR}/.ssh/id_rsa.pub"
+  ssh_key_path = "~/.ssh/"
+  config.vm.provision "shell", inline: "mkdir -p #{HOMEDIR}/.ssh"
+  config.vm.provision "file", source: "#{ ssh_key_path + 'id_rsa' }", destination: "#{HOMEDIR}/.ssh/id_rsa"
+  config.vm.provision "file", source: "#{ ssh_key_path + 'id_rsa.pub' }", destination: "#{HOMEDIR}/.ssh/id_rsa.pub"
+
+  config.vm.provision "file", source: "config/zshrc", destination: "#{HOMEDIR}/.zshrc"
 
   config.vm.provider :virtualbox do |vb|
     # vb.gui = true
