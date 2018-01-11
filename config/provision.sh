@@ -45,6 +45,14 @@ install_required_packages() {
 #     texlive-fonts-recommended-doc
 }
 
+install_googletests() {
+    sudo apt-get install g++ libgtest-dev
+    cd /usr/src/gtest
+    sudo cmake .
+    sudo make
+    sudo cp libg* /usr/lib/
+}
+
 setup_zsh() {
   chsh -s /bin/zsh vagrant
   if [[ ! -d "/home/vagrant/.oh-my-zsh" ]]; then
@@ -120,6 +128,7 @@ install_required_packages
 setup_gdb
 setup_tmux
 setup_locale
+install_googletests
 install_latest_node_v7
 install_global_npm_packages
 # install_rust
