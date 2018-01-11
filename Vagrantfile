@@ -7,7 +7,7 @@ HOMEDIR = "/home/#{USERNAME}"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.hostname = 'shelde-dev'
+  config.vm.hostname = 'devbox'
   config.vm.box = "debian/contrib-stretch64"
 
   config.vm.synced_folder "~/.vim", "#{HOMEDIR}/.vim", create: true
@@ -32,6 +32,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
     # vb.gui = true
+    vb.name = "devbox"
     vb.customize ["modifyvm", :id, "--memory", "4096"]
     vb.customize ["modifyvm", :id, "--cpus", "2"]
     vb.customize ["modifyvm", :id, "--cpuexecutioncap", "70"]
