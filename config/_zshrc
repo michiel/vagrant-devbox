@@ -7,9 +7,9 @@ export ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 # ZSH_THEME="clean"
 
-ZSH_THEME="nebirhos"
-ZSH_THEME="rgm"
-ZSH_THEME="intheloop"
+# ZSH_THEME="nebirhos"
+# ZSH_THEME="rgm"
+# ZSH_THEME="intheloop"
 ZSH_THEME="jtriley"
 
 # Example aliases
@@ -70,7 +70,6 @@ export PATH=$HOME/bin:/usr/local/bin:$HOME/.local/bin:$PATH
 
 export EDITOR='vim'
 export RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/src
-# export RUST_SRC_PATH=/home/michiel/src/rustc-nightly/src
 
 # Preferred editor for local and remote sessions
 # if [[ -n $SSH_CONNECTION ]]; then
@@ -120,11 +119,6 @@ source $HOME/.cargo/env
 # source $HOME/src/emsdk_portable/emsdk_env.sh
 # nvm use default
 
-# tabtab source for electron-forge package
-# uninstall by removing these lines or running `tabtab uninstall electron-forge`
-# [[ -f /home/michiel/.nvm/versions/node/v7.10.0/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh ]] && . /home/michiel/.nvm/versions/node/v7.10.0/lib/node_modules/electron-forge/node_modules/tabtab/.completions/electron-forge.zsh
-
-# export PATH=/home/michiel/.gem/ruby/2.3.0/bin:$PATH
 # alias vim="firejail --profile=/etc/firejail/vim.profile /usr/bin/vim"
 # alias git="firejail git"
 # alias tig="tig --show-signature" 

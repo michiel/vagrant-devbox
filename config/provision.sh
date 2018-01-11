@@ -1,12 +1,5 @@
 #!/bin/bash -eux
 
-install_extra_ppas() {
-    # add heroku repository to apt
-    echo "deb http://toolbelt.heroku.com/ubuntu ./" > /etc/apt/sources.list.d/heroku.list
-    # install heroku's release key for package verification
-    wget -q -O- https://toolbelt.heroku.com/apt/release.key | apt-key add -
-}
-
 update_package_index() {
     sudo apt-get update
 }
@@ -15,10 +8,13 @@ install_required_packages() {
   sudo apt-get install -y \
     aptitude \
     locales \
-    firejail \
     zsh \
+    vim \
     tmux \
     curl \
+    cmake \
+    golang-go \
+    valgrind \
     git \
     tig \
     tree \
@@ -41,8 +37,8 @@ install_required_packages() {
     xclip \
     libreadline-dev \
     openjdk-8-jdk-headless \
-    silversearcher-ag \
-    graphviz
+    maven \
+    silversearcher-ag
 #     pandoc \
 #     texlive-latex-base \
 #     texlive-xetex \
@@ -51,19 +47,31 @@ install_required_packages() {
 
 setup_zsh() {
   chsh -s /bin/zsh vagrant
+  if [[ ! -d "/home/vagrant/.oh-my-zsh" ]]; then
+    run_as_vagrant "git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
+  fi
+  run_as_vagrant "cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc"
+}
+
+setup_gdb() {
+  run_as_vagrant "cd; curl -o ~/.gdbinit https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit"
+}
+
+setup_tmux() {
+  if [[ ! -d "/home/vagrant/.tmux" ]]; then
+    run_as_vagrant "git clone https://github.com/gpakosz/.tmux.git ~/.tmux"
+  fi
+  run_as_vagrant "cd; ln -s -f ~/.tmux/.tmux.conf"
+  run_as_vagrant "cp .tmux/.tmux.conf.local ~/.tmux.conf.local"
 }
 
 setup_locale() {
   echo "Melbourne/Australia" > /etc/timezone
   dpkg-reconfigure -f noninteractive tzdata
-  # LANG=en_GB.UTF-8
-  # sed -i -e "s/# $LANG.*/$LANG.UTF-8 UTF-8/" /etc/locale.gen
-  # dpkg-reconfigure --frontend=noninteractive locales
-  # update-locale LANG=$LANG
-}
-
-setup_stow() {
-  run_as_vagrant "cd ~vagrant/dotfiles/; ./stow-all.sh"
+	# LANG=en_GB.UTF-8
+	# sed -i -e "s/# $LANG.*/$LANG.UTF-8 UTF-8/" /etc/locale.gen
+	# dpkg-reconfigure --frontend=noninteractive locales
+	# update-locale LANG=$LANG
 }
 
 install_rust() {
@@ -108,10 +116,13 @@ run_as_vagrant() {
 
 update_package_index
 install_required_packages
-setup_zsh
+# setup_zsh
+setup_gdb
+setup_tmux
 setup_locale
-setup_stow
 install_latest_node_v7
 install_global_npm_packages
-install_rust
+# install_rust
+# install_ruby_rbenv
+# install_ruby_2_4_1
 
