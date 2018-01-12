@@ -13,8 +13,8 @@ install_required_packages() {
     tmux \
     curl \
     cmake \
-    golang-go \
     valgrind \
+    gdb \
     git \
     tig \
     tree \
@@ -36,21 +36,7 @@ install_required_packages() {
     libjpeg-dev \
     xclip \
     libreadline-dev \
-    openjdk-8-jdk-headless \
-    maven \
     silversearcher-ag
-#     pandoc \
-#     texlive-latex-base \
-#     texlive-xetex \
-#     texlive-fonts-recommended-doc
-}
-
-install_googletests() {
-    sudo apt-get install g++ libgtest-dev
-    cd /usr/src/gtest
-    sudo cmake .
-    sudo make
-    sudo cp libg* /usr/lib/
 }
 
 setup_zsh() {
@@ -62,6 +48,7 @@ setup_zsh() {
 }
 
 setup_gdb() {
+  sudo apt-get install -y gdb
   run_as_vagrant "cd; curl -o ~/.gdbinit https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit"
 }
 
@@ -80,6 +67,35 @@ setup_locale() {
 	# sed -i -e "s/# $LANG.*/$LANG.UTF-8 UTF-8/" /etc/locale.gen
 	# dpkg-reconfigure --frontend=noninteractive locales
 	# update-locale LANG=$LANG
+}
+
+install_golang_from_package() {
+    sudo apt-get install -y golang-go
+    run_as_vagrant "mkdir ~/gocode"
+    run_as_vagrant "echo 'export GOPATH=$HOME/gocode' >> ~/.profile"
+}
+
+install_golang_from_tarball() {
+    curl -o /tmp/go.tgz https://dl.google.com/go/go1.9.2.linux-amd64.tar.gz
+    sudo tar -C /usr/local -xzf /tmp/go.tgz
+    run_as_vagrant "echo 'export PATH=$PATH:/usr/local/go/bin' > ~/.profile"
+    run_as_vagrant "mkdir ~/gocode"
+    run_as_vagrant "echo 'export GOPATH=$HOME/gocode' >> ~/.profile"
+}
+
+install_java() {
+    sudo apt-get install -y \
+      maven \
+      gradle \
+      openjdk-8-jdk-headless
+}
+
+install_googletests() {
+    sudo apt-get install -y g++ libgtest-dev
+    cd /usr/src/gtest
+    sudo cmake .
+    sudo make
+    sudo cp libg* /usr/lib/
 }
 
 install_rust() {
@@ -118,6 +134,14 @@ install_ruby_2_4_1() {
     run_as_vagrant "rbenv install 2.4.1"
 }
 
+install_pandoc() {
+    sudo apt-get install -y \
+      pandoc \
+      texlive-latex-base \
+      texlive-xetex \
+      texlive-fonts-recommended-doc
+}
+
 run_as_vagrant() {
   su vagrant bash -l -c "$1"
 }
@@ -129,9 +153,12 @@ setup_gdb
 setup_tmux
 setup_locale
 install_googletests
+install_java
+# install_golang_from_package
+install_golang_from_tarball
 install_latest_node_v7
 install_global_npm_packages
 # install_rust
 # install_ruby_rbenv
 # install_ruby_2_4_1
-
+# install_pandoc
