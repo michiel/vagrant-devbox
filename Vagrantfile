@@ -13,6 +13,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "~/.vim", "#{HOMEDIR}/.vim", create: true
   config.vm.synced_folder "~/Downloads", "#{HOMEDIR}/Downloads", create: true
   config.vm.synced_folder "~/dev", "#{HOMEDIR}/dev", create: true
+  config.vm.synced_folder "~/src", "#{HOMEDIR}/src", create: true
   config.vm.synced_folder "~/.cache/vagrant-apt-archives", "/var/cache/apt/archives"
 
   config.vm.network :forwarded_port, guest: 80, host: 9080
