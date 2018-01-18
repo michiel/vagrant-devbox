@@ -87,7 +87,7 @@ export RUST_SRC_PATH=~/.multirust/toolchains/stable-x86_64-unknown-linux-gnu/lib
 
 alias tmux="tmux -2"
 
-export NVM_DIR="/home/michiel/.nvm"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 # nvm use > /dev/null 2>&1 # v0.12.1
 # if [ $? -ne 0 ]; then
