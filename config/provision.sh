@@ -103,12 +103,12 @@ install_rust() {
     run_as_vagrant "rustup component add rust-src"
 }
 
-install_latest_node_v7() {
-    curl -sL https://deb.nodesource.com/setup_7.x | sudo -E bash -
+install_nodejs() {
     sudo apt-get install -y nodejs
-}
-
-install_global_npm_packages() {
+    run_as_vagrant "o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash"
+    run_as_vagrant "source ~/.bashrc"
+    run_as_vagrant "nvm install 8"
+    run_as_vagrant "nvm alias default 8"
     npm install --global eslint
 }
 
@@ -156,8 +156,7 @@ install_googletests
 install_java
 # install_golang_from_package
 install_golang_from_tarball
-install_latest_node_v7
-install_global_npm_packages
+install_nodejs
 # install_rust
 # install_ruby_rbenv
 # install_ruby_2_4_1
