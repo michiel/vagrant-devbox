@@ -1,3 +1,14 @@
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+Plug 'bling/vim-airline'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'mileszs/ack.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'vim-airline/vim-airline-themes'
+call plug#end()
+
 set nocompatible        " I really don't care about being VI compatible
 
 syntax enable

@@ -10,7 +10,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = 'devbox'
   config.vm.box = "debian/contrib-stretch64"
 
-  config.vm.synced_folder "~/.vim", "#{HOMEDIR}/.vim", create: true
   config.vm.synced_folder "~/Downloads", "#{HOMEDIR}/Downloads", create: true
   config.vm.synced_folder "~/dev", "#{HOMEDIR}/dev", create: true
   config.vm.synced_folder "~/src", "#{HOMEDIR}/src", create: true

@@ -49,7 +49,17 @@ setup_zsh() {
 
 setup_gdb() {
   sudo apt-get install -y gdb
-  run_as_vagrant "cd; curl -o ~/.gdbinit https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit"
+  run_as_vagrant "cd; curl -s -o ~/.gdbinit https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit"
+}
+
+setup_vim() {
+  run_as_vagrant "curl -s -fLo ~/.vim/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+  run_as_vagrant "vim -c -E <<-EOF
+:PlugInstall
+:PlugUpdate
+:quit
+EOF
+"
 }
 
 setup_tmux() {
@@ -71,15 +81,19 @@ setup_locale() {
 
 install_golang_from_package() {
     sudo apt-get install -y golang-go
-    run_as_vagrant "mkdir ~/gocode"
+    if [[ ! -d "/home/vagrant/gocode" ]]; then
+        run_as_vagrant "mkdir ~/gocode"
+    fi
     run_as_vagrant "echo 'export GOPATH=$HOME/gocode' >> ~/.profile"
 }
 
 install_golang_from_tarball() {
-    curl -o /tmp/go.tgz https://dl.google.com/go/go1.9.2.linux-amd64.tar.gz
+    curl -s -o /tmp/go.tgz https://dl.google.com/go/go1.9.2.linux-amd64.tar.gz
     sudo tar -C /usr/local -xzf /tmp/go.tgz
     run_as_vagrant "echo 'export PATH=$PATH:/usr/local/go/bin' > ~/.profile"
-    run_as_vagrant "mkdir ~/gocode"
+    if [[ ! -d "/home/vagrant/gocode" ]]; then
+      run_as_vagrant "mkdir ~/gocode"
+    fi
     run_as_vagrant "echo 'export GOPATH=$HOME/gocode' >> ~/.profile"
 }
 
@@ -99,13 +113,13 @@ install_googletests() {
 }
 
 install_rust() {
-    run_as_vagrant "curl https://sh.rustup.rs -sSf | sh -s -- -y"
+    run_as_vagrant "curl -s https://sh.rustup.rs -sSf | sh -s -- -y"
     run_as_vagrant "rustup component add rust-src"
 }
 
 install_nodejs() {
     sudo apt-get install -y nodejs
-    run_as_vagrant "o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash"
+    run_as_vagrant "curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash"
     run_as_vagrant "source ~/.bashrc"
     run_as_vagrant "nvm install 8"
     run_as_vagrant "nvm alias default 8"
@@ -152,6 +166,7 @@ install_required_packages
 setup_gdb
 setup_tmux
 setup_locale
+setup_vim
 install_googletests
 install_java
 # install_golang_from_package
