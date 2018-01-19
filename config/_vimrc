@@ -7,7 +7,10 @@ Plug 'ntpeters/vim-better-whitespace'
 Plug 'mileszs/ack.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'romainl/Apprentice'
 call plug#end()
+
+colorscheme apprentice
 
 set nocompatible        " I really don't care about being VI compatible
 
