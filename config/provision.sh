@@ -7,6 +7,7 @@ update_package_index() {
 install_required_packages() {
   sudo apt-get install -y \
     aptitude \
+    valgrind \
     locales \
     zsh \
     vim \
@@ -36,7 +37,13 @@ install_required_packages() {
     libjpeg-dev \
     xclip \
     libreadline-dev \
-    silversearcher-ag
+    silversearcher-ag \
+    graphviz
+}
+
+setup_bash() {
+  chsh -s /bin/bash vagrant
+  run_as_vagrant "echo 'source ~/.profile' >> ~/.bashrc"
 }
 
 setup_zsh() {
@@ -45,11 +52,14 @@ setup_zsh() {
     run_as_vagrant "git clone git://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh"
   fi
   run_as_vagrant "cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc"
+  run_as_vagrant "echo 'source ~/.profile' >> ~/.zshrc"
 }
 
 setup_gdb() {
   sudo apt-get install -y gdb
-  run_as_vagrant "cd; curl -s -o ~/.gdbinit https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit"
+  if [[ ! -x "/home/vagrant/.gdbinit" ]]; then
+    run_as_vagrant "curl -s -o ~/.gdbinit https://raw.githubusercontent.com/cyrus-and/gdb-dashboard/master/.gdbinit"
+  fi
 }
 
 setup_vim() {
@@ -65,9 +75,9 @@ EOF
 setup_tmux() {
   if [[ ! -d "/home/vagrant/.tmux" ]]; then
     run_as_vagrant "git clone https://github.com/gpakosz/.tmux.git ~/.tmux"
+    run_as_vagrant "cd; ln -s -f ~/.tmux/.tmux.conf"
+    run_as_vagrant "cp .tmux/.tmux.conf.local ~/.tmux.conf.local"
   fi
-  run_as_vagrant "cd; ln -s -f ~/.tmux/.tmux.conf"
-  run_as_vagrant "cp .tmux/.tmux.conf.local ~/.tmux.conf.local"
 }
 
 setup_locale() {
@@ -117,6 +127,15 @@ install_rust() {
     run_as_vagrant "rustup component add rust-src"
 }
 
+install_dart() {
+    apt-get install apt-transport-https
+    sh -c 'curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -'
+    sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
+    apt-get update
+    apt-get install dart/stable
+    run_as_vagrant "echo 'export PATH=/usr/lib/dart/bin:$PATH' >> ~/.bashrc"
+}
+
 install_nodejs() {
     sudo apt-get install -y nodejs
     run_as_vagrant "curl -s -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.8/install.sh | bash"
@@ -162,6 +181,7 @@ run_as_vagrant() {
 
 update_package_index
 install_required_packages
+setup_bash
 # setup_zsh
 setup_gdb
 setup_tmux
@@ -169,10 +189,11 @@ setup_locale
 setup_vim
 install_googletests
 install_java
-# install_golang_from_package
+install_golang_from_package
 install_golang_from_tarball
 install_nodejs
-# install_rust
+install_rust
+install_dart
 # install_ruby_rbenv
 # install_ruby_2_4_1
 # install_pandoc
